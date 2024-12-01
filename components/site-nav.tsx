@@ -62,7 +62,7 @@ export function SiteNav() {
       </Link>
 
       {/* Navigation menu (hidden on smaller screens) */}
-      <div className="hidden md:flex items-center space-x-4 justify-center">
+      <div className="hidden md:flex items-center space-x-4 justify-center ">
         <NavigationMenu>
           <NavigationMenuList>
             {navItems.map((item) => (
@@ -79,7 +79,7 @@ export function SiteNav() {
                   </Link>
                 )}
                 {item.subItems && (
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="bg-white backdrop-blur-md">
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       {item.subItems.map((subItem) => (
                         <li key={subItem.title}>
