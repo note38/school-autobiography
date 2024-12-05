@@ -6,13 +6,12 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Image from "next/image";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Input } from "@/components/ui/input";
@@ -26,11 +25,6 @@ const navItems = [
   {
     title: "Record",
     href: "/record",
-    subItems: [
-      { title: "Study Info", href: "/record/study-info" },
-      { title: "Medical History", href: "/record/medical-history" },
-      { title: "Crude", href: "/record/crude" },
-    ],
   },
   {
     title: "Diagnosis",
@@ -39,11 +33,6 @@ const navItems = [
   {
     title: "Inventory",
     href: "/inventory",
-    subItems: [
-      { title: "Supply Report", href: "/inventory/supply-report" },
-      { title: "Items", href: "/inventory/items" },
-      { title: "Inventory Report", href: "/inventory/report" },
-    ],
   },
   {
     title: "About Us",
@@ -58,46 +47,26 @@ export function SiteNav() {
     <nav className="flex justify-between items-center w-full">
       {/* Logo */}
       <Link href="/" className="font-bold text-xl">
-        Medical Portal
+        <Image
+          src="/images/logo.jpg"
+          alt="logo"
+          width={50}
+          height={50}
+          className="object-contain"
+        />
       </Link>
 
       {/* Navigation menu (hidden on smaller screens) */}
-      <div className="hidden md:flex items-center space-x-4 justify-center ">
+      <div className="hidden md:flex items-center space-x-4 justify-center">
         <NavigationMenu>
           <NavigationMenuList>
             {navItems.map((item) => (
               <NavigationMenuItem key={item.title}>
-                {item.subItems ? (
-                  <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-                ) : (
-                  <Link href={item.href} legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      {item.title}
-                    </NavigationMenuLink>
-                  </Link>
-                )}
-                {item.subItems && (
-                  <NavigationMenuContent className="bg-white backdrop-blur-md">
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {item.subItems.map((subItem) => (
-                        <li key={subItem.title}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              href={subItem.href}
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                            >
-                              <div className="text-sm font-medium leading-none">
-                                {subItem.title}
-                              </div>
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                )}
+                <Link href={item.href} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    {item.title}
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
@@ -141,20 +110,6 @@ export function SiteNav() {
                 >
                   {item.title}
                 </Link>
-                {item.subItems && (
-                  <ul className="ml-4 mt-2 space-y-2">
-                    {item.subItems.map((subItem) => (
-                      <li key={subItem.title}>
-                        <Link
-                          href={subItem.href}
-                          className="text-sm text-muted-foreground hover:text-primary"
-                        >
-                          {subItem.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
             ))}
           </div>
