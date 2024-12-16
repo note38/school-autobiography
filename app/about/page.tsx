@@ -9,18 +9,24 @@ import {
 
 const researchers = [
   {
-    name: "Dr. Jane Doe",
-    picture: "/placeholder.svg?height=100&width=100",
-    contact: "+1 234 567 8901",
-    email: "jane.doe@example.com",
+    name: "Jasmin Mamugay",
+    picture: "/images/about/jas.jpg?height=100&width=100",
+    contact: "+63 9234 567 8902",
+    email: "jasminasuncionmamis@gmail.com",
   },
   {
-    name: "Dr. John Smith",
-    picture: "/placeholder.svg?height=100&width=100",
-    contact: "+1 234 567 8902",
-    email: "john.smith@example.com",
+    name: "Cathleen Carasco",
+    picture: "/images/about/cath.jpg?height=100&width=100",
+    contact: "+63 9234 567 8902",
+    email: "cathlyncarrasco22@gmail.com",
   },
-  // Add more researchers as needed
+  {
+    name: "Jay-ar Layan",
+    picture: "/images/about/jay-r.jpg?height=100&width=100",
+    contact: "+63 9234 567 8902",
+    email: "jayare.layan@gmail.com",
+  },
+  // Add more researchers
 ];
 
 export default function AboutPage() {

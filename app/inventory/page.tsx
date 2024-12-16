@@ -34,42 +34,66 @@ export default function InventoryPage() {
   const [medicineQuantity, setMedicineQuantity] = useState("");
   const [equipmentName, setEquipmentName] = useState("");
 
-  const handleMedicineSubmit = (e: React.FormEvent) => {
+  const addMedicine = (e: React.FormEvent) => {
     e.preventDefault();
-    if (medicineName && medicineExpirationDate && medicineQuantity) {
-      setMedicines([
-        ...medicines,
-        {
-          id: Date.now(),
-          name: medicineName,
-          expirationDate: medicineExpirationDate,
-          quantity: parseInt(medicineQuantity),
-        },
-      ]);
-      setMedicineName("");
-      setMedicineExpirationDate("");
-      setMedicineQuantity("");
+    const newMedicine: Medicine = {
+      id: Date.now(),
+      name: medicineName,
+      expirationDate: medicineExpirationDate,
+      quantity: parseInt(medicineQuantity),
+    };
+    setMedicines([...medicines, newMedicine]);
+    setMedicineName("");
+    setMedicineExpirationDate("");
+    setMedicineQuantity("");
+  };
+
+  const addEquipment = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newEquipment: Equipment = {
+      id: Date.now(),
+      name: equipmentName,
+    };
+    setEquipment([...equipment, newEquipment]);
+    setEquipmentName("");
+  };
+
+  const deleteMedicine = (id: number) => {
+    setMedicines(medicines.filter((medicine) => medicine.id !== id));
+  };
+
+  const deleteEquipment = (id: number) => {
+    setEquipment(equipment.filter((item) => item.id !== id));
+  };
+
+  const editMedicine = (id: number) => {
+    const medicineToEdit = medicines.find((medicine) => medicine.id === id);
+    if (medicineToEdit) {
+      setMedicineName(medicineToEdit.name);
+      setMedicineExpirationDate(medicineToEdit.expirationDate);
+      setMedicineQuantity(medicineToEdit.quantity.toString());
+      deleteMedicine(id);
     }
   };
 
-  const handleEquipmentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (equipmentName) {
-      setEquipment([...equipment, { id: Date.now(), name: equipmentName }]);
-      setEquipmentName("");
+  const editEquipment = (id: number) => {
+    const equipmentToEdit = equipment.find((item) => item.id === id);
+    if (equipmentToEdit) {
+      setEquipmentName(equipmentToEdit.name);
+      deleteEquipment(id);
     }
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Inventory Management</h1>
-      <div className="grid md:grid-cols-2 gap-6 mb-6">
+      <h1 className="text-2xl font-bold mb-4">Inventory Management</h1>
+      <div className="grid md:grid-cols-2 gap-4 mb-8">
         <Card>
           <CardHeader>
             <CardTitle>Add Medicine</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleMedicineSubmit} className="space-y-4">
+            <form onSubmit={addMedicine} className="space-y-4">
               <div>
                 <Label htmlFor="medicineName">Name</Label>
                 <Input
@@ -103,12 +127,13 @@ export default function InventoryPage() {
             </form>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>Add Equipment</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleEquipmentSubmit} className="space-y-4">
+            <form onSubmit={addEquipment} className="space-y-4">
               <div>
                 <Label htmlFor="equipmentName">Name</Label>
                 <Input
@@ -123,7 +148,8 @@ export default function InventoryPage() {
           </CardContent>
         </Card>
       </div>
-      <div className="space-y-6">
+
+      <div className="space-y-8">
         <Card>
           <CardHeader>
             <CardTitle>Medicine Inventory</CardTitle>
@@ -135,6 +161,7 @@ export default function InventoryPage() {
                   <TableHead>Name</TableHead>
                   <TableHead>Expiration Date</TableHead>
                   <TableHead>Quantity</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -143,12 +170,30 @@ export default function InventoryPage() {
                     <TableCell>{medicine.name}</TableCell>
                     <TableCell>{medicine.expirationDate}</TableCell>
                     <TableCell>{medicine.quantity}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mr-2"
+                        onClick={() => editMedicine(medicine.id)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => deleteMedicine(medicine.id)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>Equipment Inventory</CardTitle>
@@ -158,12 +203,30 @@ export default function InventoryPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {equipment.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell>{item.name}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mr-2"
+                        onClick={() => editEquipment(item.id)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => deleteEquipment(item.id)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

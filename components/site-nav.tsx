@@ -27,7 +27,7 @@ const navItems = [
     href: "/record",
   },
   {
-    title: "Diagnosis",
+    title: "Diagnose",
     href: "/diagnosis",
   },
   {
@@ -102,7 +102,7 @@ export function SiteNav() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-white",
+                    "text-sm font-medium transition-colors hover:text-transform",
                     pathname === item.href
                       ? "text-primary"
                       : "text-muted-foreground"
