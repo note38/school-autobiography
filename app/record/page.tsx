@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -169,18 +170,16 @@ export default function StudentRecords() {
               <TableCell>{student.section}</TableCell>
               <TableCell>
                 <Button
-                  variant="outline"
+                  variant="destructive"
                   className="mr-2"
                   onClick={() => handleEdit(student)}
                 >
                   Edit
                 </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => handleDelete(student)}
-                >
-                  Delete
-                </Button>
+                <Button onClick={() => handleDelete(student)}>Delete</Button>
+                <Link className="ml-2" href="/diagnosis" passHref>
+                  <Button variant="outline">Diagnose</Button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}

@@ -5,6 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -24,6 +32,7 @@ interface Medicine {
 interface Equipment {
   id: number;
   name: string;
+  quantity: number;
 }
 
 export default function InventoryPage() {
@@ -33,6 +42,13 @@ export default function InventoryPage() {
   const [medicineExpirationDate, setMedicineExpirationDate] = useState("");
   const [medicineQuantity, setMedicineQuantity] = useState("");
   const [equipmentName, setEquipmentName] = useState("");
+  const [equipmentQuantity, setEquipmentQuantity] = useState("");
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{
+    id: number;
+    type: "medicine" | "equipment";
+  } | null>(null);
 
   const addMedicine = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,9 +69,11 @@ export default function InventoryPage() {
     const newEquipment: Equipment = {
       id: Date.now(),
       name: equipmentName,
+      quantity: parseInt(equipmentQuantity),
     };
     setEquipment([...equipment, newEquipment]);
     setEquipmentName("");
+    setEquipmentQuantity("");
   };
 
   const deleteMedicine = (id: number) => {
@@ -80,7 +98,27 @@ export default function InventoryPage() {
     const equipmentToEdit = equipment.find((item) => item.id === id);
     if (equipmentToEdit) {
       setEquipmentName(equipmentToEdit.name);
+      setEquipmentQuantity(equipmentToEdit.quantity.toString());
       deleteEquipment(id);
+    }
+  };
+
+  const openDeleteDialog = (id: number, type: "medicine" | "equipment") => {
+    setItemToDelete({ id, type });
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      if (itemToDelete.type === "medicine") {
+        setMedicines(
+          medicines.filter((medicine) => medicine.id !== itemToDelete.id)
+        );
+      } else if (itemToDelete.type === "equipment") {
+        setEquipment(equipment.filter((item) => item.id !== itemToDelete.id));
+      }
+      setIsDeleteDialogOpen(false);
+      setItemToDelete(null);
     }
   };
 
@@ -143,11 +181,45 @@ export default function InventoryPage() {
                   required
                 />
               </div>
+              <div>
+                <Label htmlFor="medicineQuantity">Quantity</Label>
+                <Input
+                  id="equipmetQuantity"
+                  type="number"
+                  value={equipmentQuantity}
+                  onChange={(e) => setEquipmentQuantity(e.target.value)}
+                  required
+                />
+              </div>
               <Button type="submit">Add Equipment</Button>
             </form>
           </CardContent>
         </Card>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this item? This action cannot be
+              undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="space-y-8">
         <Card>
@@ -182,7 +254,9 @@ export default function InventoryPage() {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => deleteMedicine(medicine.id)}
+                        onClick={() =>
+                          openDeleteDialog(medicine.id, "medicine")
+                        }
                       >
                         Delete
                       </Button>
@@ -203,6 +277,7 @@ export default function InventoryPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
+                  <TableHead>Quantity</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -210,6 +285,7 @@ export default function InventoryPage() {
                 {equipment.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.quantity}</TableCell>
                     <TableCell>
                       <Button
                         variant="outline"
@@ -222,7 +298,7 @@ export default function InventoryPage() {
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => deleteEquipment(item.id)}
+                        onClick={() => openDeleteDialog(item.id, "equipment")}
                       >
                         Delete
                       </Button>

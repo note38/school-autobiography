@@ -26,10 +26,7 @@ const navItems = [
     title: "Record",
     href: "/record",
   },
-  {
-    title: "Diagnose",
-    href: "/diagnosis",
-  },
+
   {
     title: "Inventory",
     href: "/inventory",

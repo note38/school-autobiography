@@ -75,10 +75,8 @@ export default function HomePage() {
           </Card>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
-          <StudentSection />
           <EquipmentSection />
           <MedicineSection />
-          <DiagnosisSection />
         </div>
       </div>
     </div>
